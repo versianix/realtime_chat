@@ -1,1 +1,15 @@
+<div class="fade-in-up">
 {% include 'a_rtchat/chat_message.html' %}
+</div>
+
+<style>
+    @keyframes fadeInAndUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opcaity: 1; transform: translateY(0px); }
+    }
+    .fade-in-up {
+        animation: fadeInAndUp 0.8s ease;
+    }
+</style>
+
+<script>scrollToBottom()</script>
