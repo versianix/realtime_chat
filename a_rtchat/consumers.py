@@ -67,10 +67,12 @@ class ChatRoomConsumer(WebsocketConsumer):
 
     def update_online_users_count(self):
         online_count = self.chatroom.users_online.count() - 1
+
         event = {
             'type': 'online_count_handler',
-            'online_count': online_count,
+            'online_count': online_count
         }
+
         async_to_sync(self.channel_layer.group_send)(self.chatroom_name, event)
 
     def online_count_handler(self, event):
@@ -83,7 +85,7 @@ class ChatRoomConsumer(WebsocketConsumer):
         context = {
             'online_count': online_count,
             'chat_group': self.chatroom,
-            'users': users,
+            'users': users
         }
         html = render_to_string('a_rtchat/partials/online_count_p.html', context)
         self.send(text_data=html)
@@ -101,8 +103,8 @@ class OnlineStatusConsumer(WebsocketConsumer):
             self.group_name, self.channel_name
         )
 
-        self.accept()
         self.online_status()
+        self.accept()
 
     def disconect(self, close_code):
         if self.user in self.group.users_online.all():
@@ -128,8 +130,8 @@ class OnlineStatusConsumer(WebsocketConsumer):
         public_chat_users = ChatGroup.objects.get(group_name='public-chat').users_online.exclude(id=self.user.id)
 
         my_chats = self.user.chat_groups.all()
-        private_chats_with_users = [chat for chat in my_chats.filter(is_private=True) if chat.users_online.exclude(id=self.user.id)]
-        group_chats_with_users = [chat for chat in my_chats.filter(groupchat_name__isnull=False) if chat.users_online.exclude(id=self.user.id)]
+        private_chats_with_users = [chat for chat in my_chats.filter(is_private=True) if chat.users_online.exclude(id=self.user.id).exists()]
+        group_chats_with_users = [chat for chat in my_chats.filter(groupchat_name__isnull=False) if chat.users_online.exclude(id=self.user.id).exists()]
 
         if public_chat_users or private_chats_with_users or group_chats_with_users:
             online_in_chats = True
@@ -142,5 +144,5 @@ class OnlineStatusConsumer(WebsocketConsumer):
             'public_chat_users': public_chat_users,
             'user': self.user,
         }
-        html = render_to_string('a_rtchat/partials/online_status.html', context)
+        html = render_to_string('a_rtchat/partials/online_status.html', context=context)
         self.send(text_data=html)
