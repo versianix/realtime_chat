@@ -23,7 +23,7 @@ A real-time chat application built with Django, supporting private and group cha
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/realtime_chat.git
+    git clone https://github.com/versianix/realtime_chat
     ```
 
 2. **Navigate to the project directory:**
